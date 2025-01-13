@@ -1,5 +1,6 @@
 plugins {
     id("fabric-loom") version "1.9-SNAPSHOT"
+    id("com.modrinth.minotaur") version "2.8.7"
 }
 
 repositories {
@@ -32,11 +33,6 @@ tasks {
     }
 
     jar {
-        /*dependsOn(register<Copy>("copyIcon") {
-            from(rootProject.path)
-            include("icon.png")
-            into(layout.buildDirectory.dir("main/resources/assets/clientspoofer"))
-        })*/
         doFirst {
             copy {
                 from(rootProject.files("icon.png"))
@@ -44,4 +40,26 @@ tasks {
             }
         }
     }
+
+    remapJar {
+        archiveBaseName = "ClientSpoofer-${project.name}"
+        doLast {
+            copy {
+                from(archiveFile)
+                into(rootProject.file("build/libs"))
+            }
+        }
+    }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "nWJHVhGM"
+    versionNumber = version.toString()
+    versionType = if (version.toString().contains("alpha")) "alpha"
+                  else if (version.toString().contains("beta")) "beta"
+                  else "release"
+    uploadFile = tasks.remapJar.get()
+    gameVersions = listOf("1.21.4")
+    loaders = listOf("fabric")
 }

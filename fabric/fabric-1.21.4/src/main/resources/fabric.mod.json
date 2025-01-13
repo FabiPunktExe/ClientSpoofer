@@ -3,7 +3,7 @@
   "id": "clientspoofer",
   "version": "${version}",
   "name": "Client Spoofer",
-  "description": "Hides which mods you are using",
+  "description": "Hides which client you are using",
   "authors": ["Fabi.exe"],
   "contact": {
     "sources": "https://github.com/FabiPunktExe/ClientSpoofer",
