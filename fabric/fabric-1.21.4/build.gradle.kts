@@ -55,11 +55,14 @@ tasks {
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "nWJHVhGM"
-    versionNumber = version.toString()
+    versionNumber = "$version (Fabric 1.21.4)"
     versionType = if (version.toString().contains("alpha")) "alpha"
                   else if (version.toString().contains("beta")) "beta"
                   else "release"
     uploadFile = tasks.remapJar.get()
     gameVersions = listOf("1.21.4")
     loaders = listOf("fabric")
+    dependencies {
+        optional.project("modmenu")
+    }
 }
