@@ -30,4 +30,18 @@ tasks {
             expand(mapOf("version" to project.version))
         }
     }
+
+    jar {
+        /*dependsOn(register<Copy>("copyIcon") {
+            from(rootProject.path)
+            include("icon.png")
+            into(layout.buildDirectory.dir("main/resources/assets/clientspoofer"))
+        })*/
+        doFirst {
+            copy {
+                from(rootProject.files("icon.png"))
+                into(layout.buildDirectory.dir("resources/main/assets/clientspoofer"))
+            }
+        }
+    }
 }
