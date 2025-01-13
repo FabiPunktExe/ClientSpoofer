@@ -1,0 +1,7 @@
+{
+  "clientspoofer.options.title": "Client Spoofer Options",
+  "clientspoofer.option.spoof_mode": "Spoof Mode",
+  "clientspoofer.option.spoof_mode.vanilla": "Vanilla",
+  "clientspoofer.option.spoof_mode.custom": "Custom",
+  "clientspoofer.option.custom_client": "Custom Client"
+}

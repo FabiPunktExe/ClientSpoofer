@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "clientspoofer",
+  "version": "${version}",
+  "name": "Client Spoofer",
+  "description": "Hides which mods you are using",
+  "authors": ["Fabi.exe"],
+  "contact": {
+    "sources": "https://github.com/FabiPunktExe/ClientSpoofer",
+    "issues": "https://github.com/FabiPunktExe/ClientSpoofer/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/clientspoofer/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["de.fabiexe.clientspoofer.client.ClientSpoofer"],
+    "modmenu": ["de.fabiexe.clientspoofer.integration.ModMenuIntegration"]
+  },
+  "mixins": ["clientspoofer.mixins.json"],
+  "accessWidener": "clientspoofer.accesswidener",
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "1.21.4"
+  }
+}
