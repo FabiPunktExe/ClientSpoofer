@@ -5,20 +5,21 @@ plugins {
 
 repositories {
     maven("https://maven.terraformersmc.com")
+    maven("https://maven.nucleoid.xyz")
 }
 
 dependencies {
     implementation(project(":common"))
-    minecraft("com.mojang:minecraft:1.21.4")
+    minecraft("com.mojang:minecraft:1.20.1")
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:0.16.10")
-    modImplementation("com.terraformersmc:modmenu:13.0.0")
+    modImplementation("com.terraformersmc:modmenu:7.2.2")
 }
 
 tasks {
     compileJava {
         options.encoding = "UTF-8"
-        options.release = 21
+        options.release = 17
     }
 
     processResources {
@@ -50,12 +51,12 @@ tasks {
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "nWJHVhGM"
-    versionNumber = "$version (Fabric 1.21.4)"
+    versionNumber = "$version (Fabric 1.20.1)"
     versionType = if (version.toString().contains("alpha")) "alpha"
                   else if (version.toString().contains("beta")) "beta"
                   else "release"
     uploadFile = tasks.remapJar.get()
-    gameVersions = listOf("1.21.4")
+    gameVersions = listOf("1.20.1")
     loaders = listOf("fabric")
     dependencies {
         optional.project("modmenu")

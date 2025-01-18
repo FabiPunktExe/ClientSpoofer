@@ -1,6 +1,5 @@
-package de.fabiexe.clientspoofer.client;
+package de.fabiexe.clientspoofer;
 
-import de.fabiexe.clientspoofer.ClientSpooferOptions;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.Minecraft;
 

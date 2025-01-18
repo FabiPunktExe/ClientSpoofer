@@ -1,4 +1,4 @@
-package de.fabiexe.clientspoofer.client.gui;
+package de.fabiexe.clientspoofer.gui;
 
 import de.fabiexe.clientspoofer.ClientSpooferOptions;
 import de.fabiexe.clientspoofer.SpoofMode;
