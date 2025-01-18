@@ -50,7 +50,8 @@ tasks {
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "nWJHVhGM"
-    versionNumber = "$version (Fabric 1.21.4)"
+    versionName = "$version (Fabric 1.21.4)"
+    versionNumber = version.toString()
     versionType = if (version.toString().contains("alpha")) "alpha"
                   else if (version.toString().contains("beta")) "beta"
                   else "release"
