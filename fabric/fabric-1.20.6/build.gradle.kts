@@ -28,6 +28,8 @@ tasks {
     }
 
     jar {
+        from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
         doFirst {
             copy {
                 from(rootProject.files("icon.png"))
