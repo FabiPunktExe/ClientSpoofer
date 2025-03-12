@@ -12,7 +12,7 @@ dependencies {
     minecraft("com.mojang:minecraft:1.21.2")
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:0.16.10")
-    modImplementation("com.terraformersmc:modmenu:12.0.0")
+    modImplementation("com.terraformersmc:modmenu:13.0.3")
 }
 
 tasks {
