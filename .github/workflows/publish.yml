@@ -30,7 +30,3 @@ jobs:
           for file in build/libs/*
           do gh release upload ${{ github.ref_name }} $file
           done
-      - name: Upload to Modrinth
-        env:
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-        run: ./gradlew modrinth
