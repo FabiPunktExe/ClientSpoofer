@@ -20,5 +20,8 @@
   "depends": {
     "fabricloader": "*",
     "minecraft": "1.21.1"
+  },
+  "recommends": {
+    "modmenu": ">=11.0.0"
   }
 }
