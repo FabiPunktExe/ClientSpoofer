@@ -13,6 +13,7 @@ dependencies {
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:0.16.10")
     modImplementation("com.terraformersmc:modmenu:11.0.3")
+    modRuntimeOnly("net.fabricmc.fabric-api:fabric-api:0.115.3+1.21.1")
 }
 
 tasks {
