@@ -7,7 +7,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.google.code.gson:gson:2.12.1")
+    implementation("com.google.code.gson:gson:2.13.0")
 }
 
 tasks {
