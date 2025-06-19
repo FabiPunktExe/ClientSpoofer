@@ -10,7 +10,6 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    environment: github-actions
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -24,6 +23,8 @@ jobs:
           chmod +x ./gradlew
           ./gradlew build
       - name: Publish to Modrinth
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: ./gradlew modrinth
       - name: Upload to GitHub releases
         env:
