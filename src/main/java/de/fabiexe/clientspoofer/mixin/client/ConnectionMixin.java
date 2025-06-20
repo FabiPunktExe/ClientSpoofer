@@ -2,14 +2,13 @@ package de.fabiexe.clientspoofer.mixin.client;
 
 import de.fabiexe.clientspoofer.ClientSpooferOptions;
 import de.fabiexe.clientspoofer.SpoofMode;
+import io.netty.channel.ChannelFutureListener;
 import net.minecraft.network.Connection;
-import net.minecraft.network.PacketSendListener;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.BrandPayload;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.common.custom.DiscardedPayload;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Connection.class)
 public class ConnectionMixin {
     @Inject(method = "sendPacket", at = @At("HEAD"), cancellable = true)
-    public void sendPacket(Packet<?> packet, @Nullable PacketSendListener packetSendListener, boolean bl, CallbackInfo ci) {
+    public void sendPacket(Packet<?> packet, ChannelFutureListener channelFutureListener, boolean bl, CallbackInfo ci) {
         if (packet instanceof ServerboundCustomPayloadPacket(CustomPacketPayload payload)) {
             if (!(payload instanceof DiscardedPayload) && !(payload instanceof BrandPayload)) {
                 if (ClientSpooferOptions.SPOOF_MODE == SpoofMode.OFF) {

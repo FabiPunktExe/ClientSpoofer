@@ -117,11 +117,9 @@ public class ClientSpooferOptionsScreen extends Screen {
                     Component.translatable("clientspoofer.option.allowed_custom_payload_channels"),
                     font).setMaxWidth(200));
 
-            MultiLineEditBox editBox = new MultiLineEditBox(
+            MultiLineEditBox editBox = MultiLineEditBox.builder().build(
                     font,
-                    0, 0,
                     200, 100,
-                    Component.translatable("clientspoofer.option.allowed_custom_payload_channels"),
                     Component.translatable("clientspoofer.option.allowed_custom_payload_channels"));
             editBox.setValue(String.join("\n", ClientSpooferOptions.ALLOWED_CUSTOM_PAYLOAD_CHANNELS));
             editBox.setValueListener(value -> {
