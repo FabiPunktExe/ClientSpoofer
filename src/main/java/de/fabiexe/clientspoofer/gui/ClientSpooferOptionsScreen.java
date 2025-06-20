@@ -26,26 +26,26 @@ public class ClientSpooferOptionsScreen extends Screen {
 
         // Spoof mode
         MutableComponent spoofModeButtonText = Component.translatable("clientspoofer.option.spoof_mode").append(": ");
-        spoofModeButtonText = spoofModeButtonText.append(switch (ClientSpooferOptions.INSTANCE.spoofMode) {
+        spoofModeButtonText = spoofModeButtonText.append(switch (ClientSpooferOptions.SPOOF_MODE) {
             case VANILLA -> Component.translatable("clientspoofer.option.spoof_mode.vanilla");
-            case NATIVE -> Component.translatable("options.off");
+            case OFF -> Component.translatable("options.off");
             case CUSTOM -> Component.translatable("clientspoofer.option.spoof_mode.custom");
         });
         widgets.add(Button.builder(spoofModeButtonText, button -> {
-            ClientSpooferOptions.INSTANCE.spoofMode = switch (ClientSpooferOptions.INSTANCE.spoofMode) {
-                case VANILLA -> SpoofMode.NATIVE;
-                case NATIVE -> SpoofMode.CUSTOM;
+            ClientSpooferOptions.SPOOF_MODE = switch (ClientSpooferOptions.SPOOF_MODE) {
+                case VANILLA -> SpoofMode.OFF;
+                case OFF -> SpoofMode.CUSTOM;
                 case CUSTOM -> SpoofMode.VANILLA;
             };
             rebuildWidgets();
         }).size(200, 20).build());
 
         // Custom client
-        if (ClientSpooferOptions.INSTANCE.spoofMode == SpoofMode.CUSTOM) {
+        if (ClientSpooferOptions.SPOOF_MODE == SpoofMode.CUSTOM) {
             widgets.add(new MultiLineTextWidget(Component.translatable("clientspoofer.option.custom_client").withStyle(ChatFormatting.GRAY), font));
             EditBox customClientEditBox = new EditBox(font, 0, -5, 200, 20, Component.literal(""));
-            customClientEditBox.setValue(ClientSpooferOptions.INSTANCE.customClient);
-            customClientEditBox.setResponder(value -> ClientSpooferOptions.INSTANCE.customClient = value);
+            customClientEditBox.setValue(ClientSpooferOptions.CUSTOM_CLIENT);
+            customClientEditBox.setResponder(value -> ClientSpooferOptions.CUSTOM_CLIENT = value);
             widgets.add(customClientEditBox);
         }
 
@@ -63,7 +63,7 @@ public class ClientSpooferOptionsScreen extends Screen {
 
     @Override
     public void onClose() {
-        ClientSpooferOptions.save(ClientSpoofer.getConfigFile());
+        ClientSpooferOptions.save(ClientSpoofer.CONFIG_FILE);
         Minecraft.getInstance().setScreen(previous);
     }
 }

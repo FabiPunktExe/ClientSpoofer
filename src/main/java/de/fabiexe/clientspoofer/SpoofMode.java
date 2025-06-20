@@ -1,5 +1,5 @@
 package de.fabiexe.clientspoofer;
 
 public enum SpoofMode {
-    VANILLA, NATIVE, CUSTOM
+    VANILLA, OFF, CUSTOM
 }

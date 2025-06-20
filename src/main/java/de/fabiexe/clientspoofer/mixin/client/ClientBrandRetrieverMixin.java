@@ -16,10 +16,10 @@ public class ClientBrandRetrieverMixin {
 
     @Inject(method = "getClientModName", at = @At("HEAD"), remap = false, cancellable = true)
     private static void getClientModName(CallbackInfoReturnable<String> cir) {
-        if (ClientSpooferOptions.INSTANCE.spoofMode == SpoofMode.VANILLA) {
+        if (ClientSpooferOptions.SPOOF_MODE == SpoofMode.VANILLA) {
             cir.setReturnValue(VANILLA_NAME);
-        } else if (ClientSpooferOptions.INSTANCE.spoofMode == SpoofMode.CUSTOM) {
-            cir.setReturnValue(ClientSpooferOptions.INSTANCE.customClient);
+        } else if (ClientSpooferOptions.SPOOF_MODE == SpoofMode.CUSTOM) {
+            cir.setReturnValue(ClientSpooferOptions.CUSTOM_CLIENT);
         }
     }
 }
