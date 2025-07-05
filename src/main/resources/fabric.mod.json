@@ -19,9 +19,9 @@
   "mixins": ["clientspoofer.mixins.json"],
   "depends": {
     "fabricloader": "*",
-    "minecraft": "1.21.6"
+    "minecraft": "1.21.7"
   },
   "recommends": {
-    "modmenu": ">=15.0.0-beta.2"
+    "modmenu": ">=15.0.0-beta.3"
   }
 }
