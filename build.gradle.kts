@@ -1,6 +1,6 @@
 plugins {
-    id("fabric-loom") version "1.10.5"
-    id("com.modrinth.minotaur") version "2.8.7"
+    id("fabric-loom") version "1.11.8"
+    id("com.modrinth.minotaur") version "2.8.10"
 }
 
 group = "de.fabiexe"
@@ -11,11 +11,11 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.21.7")
+    minecraft("com.mojang:minecraft:1.21.8")
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:0.16.14")
-    modImplementation("com.terraformersmc:modmenu:15.0.0-beta.3")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.128.2+1.21.7")
+    modImplementation("com.terraformersmc:modmenu:15.0.0")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.130.0+1.21.8")
     implementation("com.google.code.gson:gson:2.13.1")
 }
 
@@ -32,20 +32,20 @@ tasks {
     }
 
     remapJar {
-        archiveBaseName = "ClientSpoofer-1.21.7"
+        archiveBaseName = "ClientSpoofer-1.21.8"
     }
 }
 
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "nWJHVhGM"
-    versionName = "$version (1.21.7)"
-    versionNumber = "$version-1.21.7"
+    versionName = "$version (1.21.8)"
+    versionNumber = "$version-1.21.8"
     versionType = if (version.toString().contains("alpha")) "alpha"
     else if (version.toString().contains("beta")) "beta"
     else "release"
     uploadFile = tasks.remapJar.get()
-    gameVersions = listOf("1.21.7")
+    gameVersions = listOf("1.21.8")
     loaders = listOf("fabric")
     dependencies {
         optional.project("modmenu")
