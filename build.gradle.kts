@@ -40,7 +40,7 @@ modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "nWJHVhGM"
     versionName = "$version (1.21.7)"
-    versionNumber = version.toString()
+    versionNumber = "$version-1.21.7"
     versionType = if (version.toString().contains("alpha")) "alpha"
     else if (version.toString().contains("beta")) "beta"
     else "release"
