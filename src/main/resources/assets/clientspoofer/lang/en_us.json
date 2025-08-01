@@ -3,5 +3,7 @@
   "clientspoofer.option.spoof_mode": "Spoof Mode",
   "clientspoofer.option.spoof_mode.vanilla": "Vanilla",
   "clientspoofer.option.spoof_mode.custom": "Custom",
-  "clientspoofer.option.custom_client": "Custom Client"
+  "clientspoofer.option.custom_client": "Custom Client",
+  "clientspoofer.option.hide_mods": "Hide Mods",
+  "clientspoofer.toast.server_attempted_reading_mods": "This server attempted to read your mod list. Client Spoofer protected you."
 }
