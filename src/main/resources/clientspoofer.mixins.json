@@ -3,9 +3,15 @@
   "minVersion": "0.8",
   "package": "de.fabiexe.clientspoofer.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
+  "mixins": [
+    "AnvilMenuMixin",
+    "LanguageAccessor"
+  ],
   "client": [
-    "client.ClientBrandRetrieverMixin"
+    "client.AbstractSignEditScreenMixin",
+    "client.AnvilScreenMixin",
+    "client.ClientBrandRetrieverMixin",
+    "client.LanguageManagerAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
