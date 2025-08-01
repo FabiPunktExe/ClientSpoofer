@@ -32,10 +32,19 @@ jobs:
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: ./gradlew modrinth
-      - name: Upload to GitHub releases
+      - name: Upload to GitHub releases (on release)
+        if: github.event_name == 'release'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           for file in build/libs/*
           do gh release upload ${{ github.ref_name }} $file
+          done
+      - name: Upload to GitHub releases (on workflow dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for file in build/libs/*
+          do gh release upload ${{ github.event.inputs.version }} $file
           done
