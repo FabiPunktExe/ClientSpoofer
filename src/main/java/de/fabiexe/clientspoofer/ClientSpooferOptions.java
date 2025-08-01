@@ -10,6 +10,7 @@ import java.nio.file.Path;
 public class ClientSpooferOptions {
     public static SpoofMode SPOOF_MODE = SpoofMode.VANILLA;
     public static String CUSTOM_CLIENT = "vanilla";
+    public static boolean HIDE_MODS = true;
 
     public static void load(Path path) {
         if (!Files.exists(path)) {
@@ -20,8 +21,7 @@ public class ClientSpooferOptions {
         try {
             JsonObject json = JsonParser.parseString(Files.readString(path)).getAsJsonObject();
 
-            if (json.has("spoof-mode") && json.get("spoof-mode").isJsonPrimitive() &&
-                    json.getAsJsonPrimitive("spoof-mode").isString()) {
+            if (json.has("spoof-mode")) {
                 String mode = json.get("spoof-mode").getAsString();
                 if (mode.equalsIgnoreCase("vanilla")) {
                     SPOOF_MODE = SpoofMode.VANILLA;
@@ -34,9 +34,14 @@ public class ClientSpooferOptions {
                 save(path);
             }
 
-            if (json.has("custom-client") && json.get("custom-client").isJsonPrimitive() &&
-                    json.getAsJsonPrimitive("custom-client").isString()) {
+            if (json.has("custom-client")) {
                 CUSTOM_CLIENT = json.get("custom-client").getAsString();
+            } else {
+                save(path);
+            }
+
+            if (json.has("hide-mods")) {
+                HIDE_MODS = json.get("hide-mods").getAsBoolean();
             } else {
                 save(path);
             }
@@ -50,9 +55,14 @@ public class ClientSpooferOptions {
             JsonObject json = new JsonObject();
             json.addProperty("spoof-mode", SPOOF_MODE.name().toLowerCase());
             json.addProperty("custom-client", CUSTOM_CLIENT);
+            json.addProperty("hide-mods", HIDE_MODS);
             Files.writeString(path, json.toString());
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }
+    }
+
+    public static boolean hideMods() {
+        return SPOOF_MODE == SpoofMode.VANILLA || (SPOOF_MODE != SpoofMode.OFF && HIDE_MODS);
     }
 }
