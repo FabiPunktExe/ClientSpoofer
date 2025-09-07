@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.11.7"
+    id("fabric-loom") version "1.11.8"
     id("com.modrinth.minotaur") version "2.8.8"
 }
 
