@@ -44,7 +44,7 @@ public class ComponentUtils {
             }
         } else if (contents instanceof TranslatableContents translatable) {
             if (!canTranslate(translatable.getKey())) {
-                return Optional.of(translatable.getKey());
+                return Optional.of(Objects.requireNonNullElseGet(translatable.getFallback(), translatable::getKey));
             }
         }
         return contents.visit(Optional::of);
