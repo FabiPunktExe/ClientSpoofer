@@ -3,7 +3,7 @@
   "id": "clientspoofer",
   "version": "${version}",
   "name": "Client Spoofer",
-  "description": "This mod changes your client's brand name so that servers can't tell which client you're using.",
+  "description": "This mod hides your client name and your mod list from servers.",
   "authors": ["Fabi.exe"],
   "contact": {
     "sources": "https://github.com/FabiPunktExe/ClientSpoofer",
@@ -19,9 +19,9 @@
   "mixins": ["clientspoofer.mixins.json"],
   "depends": {
     "fabricloader": "*",
-    "minecraft": "1.21.8"
+    "minecraft": "1.21.9"
   },
   "recommends": {
-    "modmenu": ">=15.0.0-beta.3"
+    "modmenu": ">=16.0.0-rc.1"
   }
 }
