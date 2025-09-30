@@ -1,2 +1,2 @@
 # Client Spoofer
-This mod changes your client's brand name so that servers can't tell which client you're using.
+This mod hides your client name and your mod list from servers.
