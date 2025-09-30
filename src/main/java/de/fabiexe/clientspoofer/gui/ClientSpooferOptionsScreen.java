@@ -219,8 +219,8 @@ public class ClientSpooferOptionsScreen extends Screen {
         }
 
         @Override
-        public void render(GuiGraphics guiGraphics, int index, int y, int x, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered, float delta) {
-            checkbox.setPosition(x + 11, y);
+        public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float delta) {
+            checkbox.setPosition(getContentX() + 11, getContentY());
             checkbox.render(guiGraphics, mouseX, mouseY, delta);
         }
 
