@@ -24,6 +24,6 @@ public class ToastUtils {
         SystemToast.SystemToastId id = new SystemToast.SystemToastId(10000L);
         Component title = Component.literal("Client Spoofer");
         Component message = Component.translatable("clientspoofer.toast.server_attempted_reading_mods");
-        Minecraft.getInstance().getToastManager().addToast(SystemToast.multiline(Minecraft.getInstance(), id, title, message));
+        Minecraft.getInstance().getToasts().addToast(SystemToast.multiline(Minecraft.getInstance(), id, title, message));
     }
 }
