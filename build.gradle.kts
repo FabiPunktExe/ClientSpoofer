@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.11.8"
+    id("fabric-loom") version "1.14.1"
     id("com.modrinth.minotaur") version "2.8.10"
 }
 
@@ -11,11 +11,11 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.21.9")
+    minecraft("com.mojang:minecraft:1.21.10")
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:0.16.14")
     modImplementation("com.terraformersmc:modmenu:16.0.0-rc.1")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.133.14+1.21.9")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.134.1+1.21.10")
     implementation("com.google.code.gson:gson:2.13.1")
 }
 
@@ -32,20 +32,20 @@ tasks {
     }
 
     remapJar {
-        archiveBaseName = "ClientSpoofer-1.21.9"
+        archiveBaseName = "ClientSpoofer-1.21.10"
     }
 }
 
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "nWJHVhGM"
-    versionName = "$version (1.21.9)"
-    versionNumber = "$version-1.21.9"
+    versionName = "$version (1.21.10)"
+    versionNumber = "$version-1.21.10"
     versionType = if (version.toString().contains("alpha")) "alpha"
     else if (version.toString().contains("beta")) "beta"
     else "release"
     uploadFile = tasks.remapJar.get()
-    gameVersions = listOf("1.21.9")
+    gameVersions = listOf("1.21.10")
     loaders = listOf("fabric")
     dependencies {
         optional.project("modmenu")
