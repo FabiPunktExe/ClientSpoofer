@@ -22,6 +22,6 @@
     "minecraft": "1.21.9"
   },
   "recommends": {
-    "modmenu": ">=15.0.0-beta.3"
+    "modmenu": ">=16.0.0-rc.1"
   }
 }
