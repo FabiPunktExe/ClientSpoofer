@@ -2,8 +2,12 @@
   "clientspoofer.options.title": "Client Spoofer Optionen",
   "clientspoofer.option.spoof_mode": "Spoof-Modus",
   "clientspoofer.option.spoof_mode.vanilla": "Vanilla",
+  "clientspoofer.option.spoof_mode.modded": "Modded",
   "clientspoofer.option.spoof_mode.custom": "Benutzerdefiniert",
   "clientspoofer.option.custom_client": "Benutzerdefinierter Client",
   "clientspoofer.option.hide_mods": "Mod-Liste verbergen",
+  "clientspoofer.option.allowed_mods": "Erlaubte Mods (werden auch beim Verbergen der Mods angezeigt)",
+  "clientspoofer.option.disable_custom_payloads": "Custom Payloads deaktivieren (von einigen Mods verwendet)",
+  "clientspoofer.option.allowed_custom_payload_channels": "Erlaubte Custom Payload-Kanäle (werden auch beim Deaktivieren von Custom Payloads erlaubt)",
   "clientspoofer.toast.server_attempted_reading_mods": "Dieser Server hat versucht, deine Mod-Liste zu lesen. Client Spoofer hat dies verhindert."
 }

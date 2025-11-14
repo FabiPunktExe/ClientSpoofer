@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "de.fabiexe"
-version = "1.1.1"
+version = "1.2.0"
 
 repositories {
     maven("https://maven.terraformersmc.com")
