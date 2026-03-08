@@ -1,6 +1,6 @@
 plugins {
     id("fabric-loom") version "1.14.10"
-    id("com.modrinth.minotaur") version "2.8.10"
+    id("com.modrinth.minotaur") version "2.9.0"
 }
 
 group = "de.fabiexe"
