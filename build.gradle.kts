@@ -14,7 +14,7 @@ dependencies {
     minecraft("com.mojang:minecraft:1.21.11")
     mappings(loom.officialMojangMappings())
     modImplementation("net.fabricmc:fabric-loader:0.16.14")
-    modImplementation("com.terraformersmc:modmenu:17.0.0-alpha.1")
+    modImplementation("com.terraformersmc:modmenu:17.0.0")
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.139.4+1.21.11")
     implementation("com.google.code.gson:gson:2.13.1")
 }
