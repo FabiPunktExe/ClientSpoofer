@@ -1,0 +1,20 @@
+name: Build
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          java-version: 25
+          distribution: temurin
+      - name: Build
+        run: |
+          chmod +x gradlew
+          ./gradlew build --stacktrace
