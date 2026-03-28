@@ -4,7 +4,7 @@ fabric-loader = "0.18.4"
 fabric-api = "0.144.3+26.1"
 minecraft = "26.1"
 minotaur = "2.9.0"
-modmenu = "18.0.0-alpha.7"
+modmenu = "18.0.0-alpha.8"
 
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }
