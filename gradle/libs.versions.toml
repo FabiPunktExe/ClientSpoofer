@@ -1,0 +1,17 @@
+[versions]
+fabric-loom = "1.16.1"
+fabric-loader = "0.18.4"
+fabric-api = "0.144.3+26.1"
+minecraft = "26.1"
+minotaur = "2.9.0"
+modmenu = "18.0.0-alpha.8"
+
+[plugins]
+fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }
+minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
+
+[libraries]
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }

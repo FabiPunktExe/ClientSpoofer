@@ -1,6 +1,6 @@
 plugins {
-    id("fabric-loom") version "1.15.4"
-    id("com.modrinth.minotaur") version "2.9.0"
+    alias(libs.plugins.fabric.loom)
+    alias(libs.plugins.minotaur)
 }
 
 group = "de.fabiexe"
@@ -8,44 +8,53 @@ version = "1.4.0"
 
 repositories {
     maven("https://maven.terraformersmc.com")
+    maven("https://maven.nucleoid.xyz") // ModMenu has dependency to Placeholder API
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.21.11")
-    mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:0.16.14")
-    modImplementation("com.terraformersmc:modmenu:17.0.0-alpha.1")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.139.4+1.21.11")
-    implementation("com.google.code.gson:gson:2.13.1")
+    minecraft(libs.minecraft)
+    implementation(libs.fabric.loader)
+    implementation(libs.fabric.api)
+    implementation(libs.modmenu)
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
 }
 
 tasks {
     compileJava {
         options.encoding = "UTF-8"
-        options.release = 21
+        options.release = 25
     }
 
     processResources {
         filesMatching("fabric.mod.json") {
-            expand(mapOf("version" to project.version))
+            expand(mapOf(
+                "version" to project.version,
+                "minecraft_version" to libs.versions.minecraft.get(),
+                "modmenu_version" to libs.versions.modmenu.get()
+            ))
         }
     }
 
-    remapJar {
-        archiveBaseName = "ClientSpoofer-1.21.11"
+    jar {
+        archiveBaseName = "ClientSpoofer-${libs.versions.minecraft.get()}"
     }
 }
 
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "nWJHVhGM"
-    versionName = "$version (1.21.11)"
-    versionNumber = "$version-1.21.11"
+    versionName = "$version (${libs.versions.minecraft.get()})"
+    versionNumber = "$version-${libs.versions.minecraft.get()}"
     versionType = if (version.toString().contains("alpha")) "alpha"
     else if (version.toString().contains("beta")) "beta"
     else "release"
-    uploadFile = tasks.remapJar.get()
-    gameVersions = listOf("1.21.11")
+    uploadFile = tasks.jar.get()
+    gameVersions = listOf(libs.versions.minecraft.get())
     loaders = listOf("fabric")
     dependencies {
         optional.project("modmenu")

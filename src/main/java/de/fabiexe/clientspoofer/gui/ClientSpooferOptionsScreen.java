@@ -3,13 +3,11 @@ package de.fabiexe.clientspoofer.gui;
 import de.fabiexe.clientspoofer.ClientSpoofer;
 import de.fabiexe.clientspoofer.ClientSpooferOptions;
 import de.fabiexe.clientspoofer.SpoofMode;
-import java.util.ArrayList;
-import java.util.List;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.*;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -18,8 +16,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
-import static net.minecraft.network.chat.CommonComponents.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static net.minecraft.network.chat.CommonComponents.OPTION_OFF;
+import static net.minecraft.network.chat.CommonComponents.OPTION_ON;
 
 public class ClientSpooferOptionsScreen extends Screen {
     private final Screen previous;
@@ -38,13 +41,13 @@ public class ClientSpooferOptionsScreen extends Screen {
 
         // Spoof mode
         MutableComponent spoofModeButtonText = Component.translatable("clientspoofer.option.spoof_mode").append(": ");
-        spoofModeButtonText = spoofModeButtonText.append(switch (spoofMode) {
+        spoofModeButtonText.append(switch (spoofMode) {
             case VANILLA -> Component.translatable("clientspoofer.option.spoof_mode.vanilla");
             case MODDED -> Component.translatable("clientspoofer.option.spoof_mode.modded");
             case CUSTOM -> Component.translatable("clientspoofer.option.spoof_mode.custom");
             case OFF -> OPTION_OFF;
         });
-        widgets.add(Button.builder(spoofModeButtonText, button -> {
+        widgets.add(Button.builder(spoofModeButtonText, _ -> {
             ClientSpooferOptions.SPOOF_MODE = switch (spoofMode) {
                 case VANILLA -> SpoofMode.MODDED;
                 case MODDED -> SpoofMode.CUSTOM;
@@ -71,7 +74,7 @@ public class ClientSpooferOptionsScreen extends Screen {
             Component text = Component.translatable("clientspoofer.option.prevent_fingerprinting")
                     .append(": ")
                     .append(ClientSpooferOptions.PREVENT_FINGERPRINTING ? OPTION_ON : OPTION_OFF);
-            widgets.add(Button.builder(text, button -> {
+            widgets.add(Button.builder(text, _ -> {
                 ClientSpooferOptions.PREVENT_FINGERPRINTING = !ClientSpooferOptions.PREVENT_FINGERPRINTING;
                 rebuildWidgets();
             }).size(200, 20).build());
@@ -82,7 +85,7 @@ public class ClientSpooferOptionsScreen extends Screen {
             Component text = Component.translatable("clientspoofer.option.hide_mods")
                     .append(": ")
                     .append(ClientSpooferOptions.HIDE_MODS ? OPTION_ON : OPTION_OFF);
-            widgets.add(Button.builder(text, button -> {
+            widgets.add(Button.builder(text, _ -> {
                 ClientSpooferOptions.HIDE_MODS = !ClientSpooferOptions.HIDE_MODS;
                 rebuildWidgets();
             }).size(200, 20).build());
@@ -115,8 +118,8 @@ public class ClientSpooferOptionsScreen extends Screen {
         // Disable custom payloads
         if (spoofMode == SpoofMode.CUSTOM) {
             MutableComponent disableCustomPayloadsButtonText = Component.translatable("clientspoofer.option.disable_custom_payloads").append(": ");
-            disableCustomPayloadsButtonText = disableCustomPayloadsButtonText.append(ClientSpooferOptions.DISABLE_CUSTOM_PAYLOADS ? OPTION_ON : OPTION_OFF);
-            widgets.add(Button.builder(disableCustomPayloadsButtonText, button -> {
+            disableCustomPayloadsButtonText.append(ClientSpooferOptions.DISABLE_CUSTOM_PAYLOADS ? OPTION_ON : OPTION_OFF);
+            widgets.add(Button.builder(disableCustomPayloadsButtonText, _ -> {
                 ClientSpooferOptions.DISABLE_CUSTOM_PAYLOADS = !ClientSpooferOptions.DISABLE_CUSTOM_PAYLOADS;
                 rebuildWidgets();
             }).pos(0, 10).size(200, 20).build());
@@ -148,7 +151,7 @@ public class ClientSpooferOptionsScreen extends Screen {
         }
 
         // Done
-        widgets.add(Button.builder(Component.translatable("gui.done"), button -> onClose())
+        widgets.add(Button.builder(Component.translatable("gui.done"), _ -> onClose())
                 .size(200, 20)
                 .build());
 
@@ -195,10 +198,10 @@ public class ClientSpooferOptionsScreen extends Screen {
         }
 
         @Override
-        protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {}
+        protected void updateWidgetNarration(@NonNull NarrationElementOutput output) {}
 
         @Override
-        protected int addEntry(ModAllowEntry entry) {
+        protected int addEntry(@NonNull ModAllowEntry entry) {
             return super.addEntry(entry);
         }
 
@@ -214,7 +217,7 @@ public class ClientSpooferOptionsScreen extends Screen {
         public ModAllowEntry(@NotNull ModContainer mod) {
             checkbox = Checkbox.builder(Component.literal(mod.getMetadata().getName()), font)
                     .selected(ClientSpooferOptions.ALLOWED_MODS.contains(mod.getMetadata().getId()))
-                    .onValueChange((checkbox, value) -> {
+                    .onValueChange((_, value) -> {
                         String modId = mod.getMetadata().getId();
                         if (value) {
                             ClientSpooferOptions.ALLOWED_MODS.add(modId);
@@ -231,9 +234,9 @@ public class ClientSpooferOptionsScreen extends Screen {
         }
 
         @Override
-        public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float delta) {
+        public void extractContent(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float delta) {
             checkbox.setPosition(getContentX() + 11, getContentY());
-            checkbox.render(guiGraphics, mouseX, mouseY, delta);
+            checkbox.extractContents(graphics, mouseX, mouseY, delta);
         }
 
         @Override
