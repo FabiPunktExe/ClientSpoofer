@@ -1,6 +1,6 @@
 package de.fabiexe.clientspoofer.util;
 
-import de.fabiexe.clientspoofer.ClientSpooferOptions;
+import de.fabiexe.clientspoofer.ClientSpoofer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.ServerData;
@@ -98,8 +98,8 @@ public class ComponentUtils {
         for (int i = 1; i < allPackResources.size(); i++) {
             PackResources packResource = allPackResources.get(i);
             PackSource source = packResource.location().source();
-            if (!ClientSpooferOptions.hideMods() ||
-                    ClientSpooferOptions.ALLOWED_MODS.contains(packResource.packId()) ||
+            if (!ClientSpoofer.getOptions().isHideMods() ||
+                    ClientSpoofer.getOptions().getAllowedMods().contains(packResource.packId()) ||
                     source == PackSource.FEATURE ||
                     source == PackSource.WORLD ||
                     source == PackSource.SERVER) {

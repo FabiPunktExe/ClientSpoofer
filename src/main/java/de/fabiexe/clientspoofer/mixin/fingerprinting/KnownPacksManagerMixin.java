@@ -1,6 +1,6 @@
 package de.fabiexe.clientspoofer.mixin.fingerprinting;
 
-import de.fabiexe.clientspoofer.ClientSpooferOptions;
+import de.fabiexe.clientspoofer.ClientSpoofer;
 import de.fabiexe.clientspoofer.SpoofMode;
 import net.minecraft.client.multiplayer.KnownPacksManager;
 import net.minecraft.server.packs.repository.KnownPack;
@@ -17,13 +17,12 @@ public class KnownPacksManagerMixin {
             at = @At(value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"))
     private <V> V redirectSelectPacks(Map<KnownPack, V> instance, Object object) {
         KnownPack pack = (KnownPack) object;
-        if (!pack.namespace().equalsIgnoreCase("fabric") ||
-                ClientSpooferOptions.SPOOF_MODE == SpoofMode.OFF) {
+        SpoofMode spoofMode = ClientSpoofer.getOptions().getSpoofMode();
+        if (!pack.namespace().equalsIgnoreCase("fabric") || spoofMode == SpoofMode.OFF) {
             return instance.get(pack);
         }
-        if (ClientSpooferOptions.SPOOF_MODE == SpoofMode.MODDED ||
-                ClientSpooferOptions.SPOOF_MODE == SpoofMode.CUSTOM) {
-            for (String mod : ClientSpooferOptions.ALLOWED_MODS) {
+        if (spoofMode == SpoofMode.MODDED || spoofMode == SpoofMode.CUSTOM) {
+            for (String mod : ClientSpoofer.getOptions().getAllowedMods()) {
                 if (pack.id().toLowerCase().startsWith(mod.toLowerCase())) {
                     return instance.get(pack);
                 }

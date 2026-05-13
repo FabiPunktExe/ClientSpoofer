@@ -1,7 +1,6 @@
 package de.fabiexe.clientspoofer.mixin.custompayload;
 
-import de.fabiexe.clientspoofer.ClientSpooferOptions;
-import de.fabiexe.clientspoofer.SpoofMode;
+import de.fabiexe.clientspoofer.ClientSpoofer;
 import io.netty.channel.ChannelFutureListener;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
@@ -20,20 +19,26 @@ public class ConnectionMixin {
     public void sendPacket(Packet<?> packet, ChannelFutureListener listener, boolean flush, CallbackInfo ci) {
         if (packet instanceof ServerboundCustomPayloadPacket(CustomPacketPayload payload)) {
             if (!(payload instanceof DiscardedPayload) && !(payload instanceof BrandPayload)) {
-                if (ClientSpooferOptions.SPOOF_MODE == SpoofMode.OFF) {
-                    return;
-                } else if (ClientSpooferOptions.SPOOF_MODE == SpoofMode.MODDED) {
-                    for (String mod : ClientSpooferOptions.ALLOWED_MODS) {
-                        if (payload.type().id().toString().toLowerCase().startsWith(mod.toLowerCase())) {
-                            return;
+                switch (ClientSpoofer.getOptions().getSpoofMode()) {
+                    case VANILLA -> {}
+                    case MODDED -> {
+                        for (String mod : ClientSpoofer.getOptions().getAllowedMods()) {
+                            if (payload.type().id().toString().toLowerCase().startsWith(mod.toLowerCase())) {
+                                return;
+                            }
                         }
                     }
-                } else if (ClientSpooferOptions.SPOOF_MODE == SpoofMode.CUSTOM &&
-                        ClientSpooferOptions.DISABLE_CUSTOM_PAYLOADS) {
-                    for (String channel : ClientSpooferOptions.ALLOWED_CUSTOM_PAYLOAD_CHANNELS) {
-                        if (payload.type().id().toString().toLowerCase().startsWith(channel.toLowerCase())) {
-                            return;
+                    case CUSTOM -> {
+                        if (ClientSpoofer.getOptions().isDisableCustomPayloads()) {
+                            for (String channel : ClientSpoofer.getOptions().getAllowedCustomPayloadChannels()) {
+                                if (payload.type().id().toString().toLowerCase().startsWith(channel.toLowerCase())) {
+                                    return;
+                                }
+                            }
                         }
+                    }
+                    case OFF -> {
+                        return;
                     }
                 }
                 ci.cancel();

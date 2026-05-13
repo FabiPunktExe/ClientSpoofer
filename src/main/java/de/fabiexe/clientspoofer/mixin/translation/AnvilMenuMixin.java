@@ -1,6 +1,6 @@
 package de.fabiexe.clientspoofer.mixin.translation;
 
-import de.fabiexe.clientspoofer.ClientSpooferOptions;
+import de.fabiexe.clientspoofer.ClientSpoofer;
 import de.fabiexe.clientspoofer.util.ComponentUtils;
 import de.fabiexe.clientspoofer.util.ToastUtils;
 import net.minecraft.network.chat.Component;
@@ -15,7 +15,7 @@ public class AnvilMenuMixin {
             method = "createResult",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/Component;getString()Ljava/lang/String;"))
     public String getString(Component instance) {
-        if (ClientSpooferOptions.hideMods()) {
+        if (ClientSpoofer.getOptions().isHideMods()) {
             String str = ComponentUtils.getString(instance);
             if (!str.equals(instance.getString())) {
                 ToastUtils.showServerAttemptedReadingModsToast();

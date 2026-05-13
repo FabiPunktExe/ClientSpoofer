@@ -1,6 +1,6 @@
 package de.fabiexe.clientspoofer.mixin.fingerprinting;
 
-import de.fabiexe.clientspoofer.ClientSpooferOptions;
+import de.fabiexe.clientspoofer.ClientSpoofer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.DownloadQueue;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +14,7 @@ import java.util.UUID;
 public class DownloadQueueMixin {
     @Redirect(method = "lambda$runDownload$0", at = @At(value = "INVOKE", target = "Ljava/nio/file/Path;resolve(Ljava/lang/String;)Ljava/nio/file/Path;"))
     public Path resolve(Path instance, String other) {
-        if (ClientSpooferOptions.preventFingerprinting()) {
+        if (ClientSpoofer.getOptions().isPreventFingerprinting()) {
             UUID uuid = Minecraft.getInstance().getUser().getProfileId();
             return instance.resolve(uuid.toString()).resolve(other);
         } else {

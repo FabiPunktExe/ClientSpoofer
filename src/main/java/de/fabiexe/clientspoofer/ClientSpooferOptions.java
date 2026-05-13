@@ -1,118 +1,97 @@
 package de.fabiexe.clientspoofer;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
 import java.util.Set;
 
 public class ClientSpooferOptions {
-    public static SpoofMode SPOOF_MODE = SpoofMode.VANILLA;
-    public static String CUSTOM_CLIENT = "fabric";
-    public static boolean HIDE_MODS = true;
-    public static boolean DISABLE_CUSTOM_PAYLOADS = true;
-    public static boolean PREVENT_FINGERPRINTING = true;
-    public static Set<String> ALLOWED_MODS = new HashSet<>();
-    public static Set<String> ALLOWED_CUSTOM_PAYLOAD_CHANNELS = new HashSet<>();
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private SpoofMode spoofMode;
+    private String customClient;
+    private Boolean preventFingerprinting;
+    private Boolean hideMods;
+    private Set<String> allowedMods;
+    private Boolean disableCustomPayloads;
+    private Set<String> allowedCustomPayloadChannels;
 
-    public static void load(Path path) {
-        if (!Files.exists(path)) {
-            save(path);
-            return;
-        }
-
-        try {
-            JsonObject json = JsonParser.parseString(Files.readString(path)).getAsJsonObject();
-
-            if (json.has("spoof-mode")) {
-                SPOOF_MODE = SpoofMode.valueOf(json.get("spoof-mode").getAsString().toUpperCase());
-            } else {
-                save(path);
-            }
-
-            if (json.has("custom-client")) {
-                CUSTOM_CLIENT = json.get("custom-client").getAsString();
-            } else {
-                save(path);
-            }
-
-            if (json.has("hide-mods")) {
-                HIDE_MODS = json.get("hide-mods").getAsBoolean();
-            } else {
-                save(path);
-            }
-
-            if (json.has("disable-custom-payloads")) {
-                DISABLE_CUSTOM_PAYLOADS = json.get("disable-custom-payloads").getAsBoolean();
-            } else {
-                save(path);
-            }
-
-            if (json.has("prevent-fingerprinting")) {
-                PREVENT_FINGERPRINTING = json.get("prevent-fingerprinting").getAsBoolean();
-            } else {
-                save(path);
-            }
-
-            if (json.has("allowed-mods")) {
-                ALLOWED_MODS.clear();
-                for (var element : json.getAsJsonArray("allowed-mods")) {
-                    ALLOWED_MODS.add(element.getAsString());
-                }
-            } else {
-                save(path);
-            }
-
-            if (json.has("allowed-custom-payload-channels")) {
-                ALLOWED_CUSTOM_PAYLOAD_CHANNELS.clear();
-                for (var element : json.getAsJsonArray("allowed-custom-payload-channels")) {
-                    ALLOWED_CUSTOM_PAYLOAD_CHANNELS.add(element.getAsString());
-                }
-            } else {
-                save(path);
-            }
-        } catch(IOException | JsonParseException e) {
-            ClientSpoofer.LOGGER.error("Failed to load ClientSpoofer options", e);
-        }
+    public @NotNull SpoofMode getSpoofMode() {
+        return spoofMode != null ? spoofMode : SpoofMode.VANILLA;
     }
 
-    public static void save(Path path) {
+    public void setSpoofMode(@NotNull SpoofMode spoofMode) {
+        this.spoofMode = spoofMode;
+    }
+
+    public @NotNull String getCustomClient() {
+        return customClient != null ? customClient : "vanilla";
+    }
+
+    public void setCustomClient(@NotNull String customClient) {
+        this.customClient = customClient;
+    }
+
+    public boolean isPreventFingerprinting() {
+        return preventFingerprinting != null ? preventFingerprinting : false;
+    }
+
+    public void setPreventFingerprinting(boolean preventFingerprinting) {
+        this.preventFingerprinting = preventFingerprinting;
+    }
+
+    public boolean isHideMods() {
+        return hideMods != null ? hideMods : false;
+    }
+
+    public void setHideMods(boolean hideMods) {
+        this.hideMods = hideMods;
+    }
+
+    public @NotNull Set<String> getAllowedMods() {
+        return allowedMods != null ? allowedMods : Set.of();
+    }
+
+    public void setAllowedMods(@NotNull Set<String> allowedMods) {
+        this.allowedMods = allowedMods;
+    }
+
+    public boolean isDisableCustomPayloads() {
+        return disableCustomPayloads != null ? disableCustomPayloads : true;
+    }
+
+    public void setDisableCustomPayloads(boolean disableCustomPayloads) {
+        this.disableCustomPayloads = disableCustomPayloads;
+    }
+
+    public @NotNull Set<String> getAllowedCustomPayloadChannels() {
+        return allowedCustomPayloadChannels != null ? allowedCustomPayloadChannels : Set.of();
+    }
+
+    public void setAllowedCustomPayloadChannels(@NotNull Set<String> allowedCustomPayloadChannels) {
+        this.allowedCustomPayloadChannels = allowedCustomPayloadChannels;
+    }
+
+    public static @NotNull ClientSpooferOptions load(@NotNull Path path) {
         try {
-            JsonObject json = new JsonObject();
-            json.addProperty("spoof-mode", SPOOF_MODE.name().toLowerCase());
-            json.addProperty("custom-client", CUSTOM_CLIENT);
-            json.addProperty("hide-mods", HIDE_MODS);
-            json.addProperty("disable-custom-payloads", DISABLE_CUSTOM_PAYLOADS);
-            json.addProperty("prevent-fingerprinting", PREVENT_FINGERPRINTING);
-            JsonArray allowedModsArray = new JsonArray();
-            ALLOWED_MODS.forEach(allowedModsArray::add);
-            json.add("allowed-mods", allowedModsArray);
-            JsonArray allowedCustomPayloadChannelsArray = new JsonArray();
-            ALLOWED_CUSTOM_PAYLOAD_CHANNELS.forEach(allowedCustomPayloadChannelsArray::add);
-            json.add("allowed-custom-payload-channels", allowedCustomPayloadChannelsArray);
-            Files.writeString(path, json.toString());
+            if (Files.exists(path)) {
+                return gson.fromJson(Files.readString(path), ClientSpooferOptions.class);
+            }
+        } catch (IOException | JsonSyntaxException e) {
+            ClientSpoofer.LOGGER.error("Failed to load Client Spoofer options, using defaults", e);
+        }
+        return new ClientSpooferOptions();
+    }
+
+    public static void save(@NotNull Path path, @NotNull ClientSpooferOptions options) {
+        try {
+            Files.writeString(path, gson.toJson(options));
         } catch (IOException e) {
-            e.printStackTrace(System.err);
+            ClientSpoofer.LOGGER.error("Failed to save Client Spoofer options", e);
         }
-    }
-
-    public static boolean hideMods() {
-        return switch (SPOOF_MODE) {
-            case SpoofMode.VANILLA, SpoofMode.MODDED -> true;
-            case SpoofMode.CUSTOM -> HIDE_MODS;
-            case SpoofMode.OFF -> false;
-        };
-    }
-
-    public static boolean preventFingerprinting() {
-        return switch (SPOOF_MODE) {
-            case SpoofMode.VANILLA, SpoofMode.MODDED -> true;
-            case SpoofMode.CUSTOM -> PREVENT_FINGERPRINTING;
-            case SpoofMode.OFF -> false;
-        };
     }
 }

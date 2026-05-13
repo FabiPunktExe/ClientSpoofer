@@ -1,6 +1,6 @@
 package de.fabiexe.clientspoofer.mixin.translation;
 
-import de.fabiexe.clientspoofer.ClientSpooferOptions;
+import de.fabiexe.clientspoofer.ClientSpoofer;
 import de.fabiexe.clientspoofer.util.ComponentUtils;
 import de.fabiexe.clientspoofer.util.ToastUtils;
 import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
@@ -19,7 +19,7 @@ public abstract class AbstractSignEditScreenMixin {
             at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;map(Ljava/util/function/Function;)Ljava/util/stream/Stream;"))
     public Stream<String> init(Stream<Component> instance, Function<Component, String> function) {
         return instance.map(message -> {
-            if (ClientSpooferOptions.hideMods()) {
+            if (ClientSpoofer.getOptions().isHideMods()) {
                 String str = ComponentUtils.getString(message);
                 if (!str.equals(message.getString())) {
                     ToastUtils.showServerAttemptedReadingModsToast();

@@ -14,17 +14,26 @@ import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static net.minecraft.network.chat.CommonComponents.OPTION_OFF;
 import static net.minecraft.network.chat.CommonComponents.OPTION_ON;
 
 public class ClientSpooferOptionsScreen extends Screen {
+    private final static Component OPTION_SPOOF_MODE = Component.translatable("clientspoofer.option.spoof_mode");
+    private final static Component OPTION_CUSTOM_CLIENT = Component.translatable("clientspoofer.option.custom_client");
+    private final static Component OPTION_PREVENT_FINGERPRINTING = Component.translatable("clientspoofer.option.prevent_fingerprinting");
+    private final static Component OPTION_HIDE_MODS = Component.translatable("clientspoofer.option.hide_mods");
+    private final static Component OPTION_ALLOWED_MODS = Component.translatable("clientspoofer.option.allowed_mods");
+    private final static Component OPTION_FILTER = Component.translatable("clientspoofer.option.filter");
+    private final static Component OPTION_DISABLE_CUSTOM_PAYLOADS = Component.translatable("clientspoofer.option.disable_custom_payloads");
+    private final static Component OPTION_ALLOWED_CUSTOM_PAYLOAD_CHANNELS = Component.translatable("clientspoofer.option.allowed_custom_payload_channels");
     private final Screen previous;
     private String modSearch = "";
     private ModAllowList modAllowList = null;
@@ -36,73 +45,48 @@ public class ClientSpooferOptionsScreen extends Screen {
 
     @Override
     protected void init() {
-        SpoofMode spoofMode = ClientSpooferOptions.SPOOF_MODE;
+        ClientSpooferOptions options = ClientSpoofer.getOptions();
+        SpoofMode spoofMode = options.getSpoofMode();
         List<AbstractWidget> widgets = new ArrayList<>();
 
         // Spoof mode
-        MutableComponent spoofModeButtonText = Component.translatable("clientspoofer.option.spoof_mode").append(": ");
-        spoofModeButtonText.append(switch (spoofMode) {
-            case VANILLA -> Component.translatable("clientspoofer.option.spoof_mode.vanilla");
-            case MODDED -> Component.translatable("clientspoofer.option.spoof_mode.modded");
-            case CUSTOM -> Component.translatable("clientspoofer.option.spoof_mode.custom");
-            case OFF -> OPTION_OFF;
-        });
-        widgets.add(Button.builder(spoofModeButtonText, _ -> {
-            ClientSpooferOptions.SPOOF_MODE = switch (spoofMode) {
-                case VANILLA -> SpoofMode.MODDED;
-                case MODDED -> SpoofMode.CUSTOM;
-                case CUSTOM -> SpoofMode.OFF;
-                case OFF -> SpoofMode.VANILLA;
-            };
+        widgets.add(Button.builder(OPTION_SPOOF_MODE.copy().append(": ").append(spoofModeToComponent(spoofMode)), _ -> {
+            ClientSpoofer.getOptions().setSpoofMode(toggleSpoofMode(spoofMode));
             rebuildWidgets();
-        }).size(200, 20).build());
+        }).build());
 
-        // Custom client
+        // Custom brand
         if (spoofMode == SpoofMode.CUSTOM) {
-            widgets.add(new MultiLineTextWidget(
-                    Component.translatable("clientspoofer.option.custom_client").withStyle(ChatFormatting.GRAY),
-                    font).setMaxWidth(200));
-
-            EditBox customClientEditBox = new EditBox(font, 0, -5, 200, 20, Component.literal(""));
-            customClientEditBox.setValue(ClientSpooferOptions.CUSTOM_CLIENT);
-            customClientEditBox.setResponder(value -> ClientSpooferOptions.CUSTOM_CLIENT = value);
+            widgets.add(new MultiLineTextWidget(OPTION_CUSTOM_CLIENT.copy().withStyle(ChatFormatting.GRAY), font).setMaxWidth(Button.DEFAULT_WIDTH));
+            EditBox customClientEditBox = new EditBox(font, 0, -5, Button.DEFAULT_WIDTH, Button.DEFAULT_HEIGHT, Component.empty());
+            customClientEditBox.setValue(options.getCustomClient());
+            customClientEditBox.setResponder(options::setCustomClient);
             widgets.add(customClientEditBox);
         }
 
         // Prevent fingerprinting
         if (spoofMode == SpoofMode.CUSTOM) {
-            Component text = Component.translatable("clientspoofer.option.prevent_fingerprinting")
-                    .append(": ")
-                    .append(ClientSpooferOptions.PREVENT_FINGERPRINTING ? OPTION_ON : OPTION_OFF);
-            widgets.add(Button.builder(text, _ -> {
-                ClientSpooferOptions.PREVENT_FINGERPRINTING = !ClientSpooferOptions.PREVENT_FINGERPRINTING;
+            widgets.add(Button.builder(OPTION_PREVENT_FINGERPRINTING.copy().append(": ").append(options.isPreventFingerprinting() ? OPTION_ON : OPTION_OFF), _ -> {
+                options.setPreventFingerprinting(!options.isPreventFingerprinting());
                 rebuildWidgets();
-            }).size(200, 20).build());
+            }).build());
         }
 
         // Hide mods
-        if (spoofMode == SpoofMode.CUSTOM) {
-            Component text = Component.translatable("clientspoofer.option.hide_mods")
-                    .append(": ")
-                    .append(ClientSpooferOptions.HIDE_MODS ? OPTION_ON : OPTION_OFF);
-            widgets.add(Button.builder(text, _ -> {
-                ClientSpooferOptions.HIDE_MODS = !ClientSpooferOptions.HIDE_MODS;
+        if (spoofMode == SpoofMode.MODDED || spoofMode == SpoofMode.CUSTOM) {
+            widgets.add(Button.builder(OPTION_HIDE_MODS.copy().append(": ").append(options.isHideMods() ? OPTION_ON : OPTION_OFF), _ -> {
+                options.setHideMods(!options.isHideMods());
                 rebuildWidgets();
-            }).size(200, 20).build());
+            }).build());
         }
 
         // Allowed mods
         if (spoofMode == SpoofMode.MODDED || spoofMode == SpoofMode.CUSTOM) {
-            widgets.add(new MultiLineTextWidget(
-                    0, 10,
-                    Component.translatable("clientspoofer.option.allowed_mods"),
-                    font).setMaxWidth(200));
+            widgets.add(new MultiLineTextWidget(0, 10, OPTION_ALLOWED_MODS, font).setMaxWidth(200));
 
-            widgets.add(new MultiLineTextWidget(
-                    Component.translatable("clientspoofer.option.filter").withStyle(ChatFormatting.GRAY),
-                    font).setMaxWidth(200));
+            widgets.add(new MultiLineTextWidget(OPTION_FILTER.copy().withStyle(ChatFormatting.GRAY), font).setMaxWidth(200));
 
-            EditBox searchEditBox = new EditBox(font, 0, -5, 200, 20, Component.literal(""));
+            EditBox searchEditBox = new EditBox(font, 0, -5, 250, 20, Component.literal(""));
             searchEditBox.setValue(modSearch);
             searchEditBox.setResponder(value -> {
                 modSearch = value;
@@ -110,40 +94,34 @@ public class ClientSpooferOptionsScreen extends Screen {
             });
             widgets.add(searchEditBox);
 
-            modAllowList = new ModAllowList(minecraft, 200, 100, 0);
+            modAllowList = new ModAllowList(minecraft, 250, 100, 0);
             fillModAllowList();
             widgets.add(modAllowList);
         }
 
         // Disable custom payloads
         if (spoofMode == SpoofMode.CUSTOM) {
-            MutableComponent disableCustomPayloadsButtonText = Component.translatable("clientspoofer.option.disable_custom_payloads").append(": ");
-            disableCustomPayloadsButtonText.append(ClientSpooferOptions.DISABLE_CUSTOM_PAYLOADS ? OPTION_ON : OPTION_OFF);
-            widgets.add(Button.builder(disableCustomPayloadsButtonText, _ -> {
-                ClientSpooferOptions.DISABLE_CUSTOM_PAYLOADS = !ClientSpooferOptions.DISABLE_CUSTOM_PAYLOADS;
+            widgets.add(Button.builder(OPTION_DISABLE_CUSTOM_PAYLOADS.copy().append(": ").append(options.isDisableCustomPayloads() ? OPTION_ON : OPTION_OFF), _ -> {
+                options.setDisableCustomPayloads(!options.isDisableCustomPayloads());
                 rebuildWidgets();
-            }).pos(0, 10).size(200, 20).build());
+            }).pos(0, 10).build());
         }
 
         // Allowed custom payload channels
         if (spoofMode == SpoofMode.CUSTOM) {
-            widgets.add(new MultiLineTextWidget(
-                    0, 10,
-                    Component.translatable("clientspoofer.option.allowed_custom_payload_channels"),
-                    font).setMaxWidth(200));
+            widgets.add(new MultiLineTextWidget(0, 10, OPTION_ALLOWED_CUSTOM_PAYLOAD_CHANNELS, font).setMaxWidth(200));
 
-            MultiLineEditBox editBox = MultiLineEditBox.builder().build(
-                    font,
-                    200, 100,
-                    Component.translatable("clientspoofer.option.allowed_custom_payload_channels"));
-            editBox.setValue(String.join("\n", ClientSpooferOptions.ALLOWED_CUSTOM_PAYLOAD_CHANNELS));
+            MultiLineEditBox editBox = MultiLineEditBox.builder().build(font, 200, 100, OPTION_ALLOWED_CUSTOM_PAYLOAD_CHANNELS);
+            editBox.setValue(String.join("\n", options.getAllowedCustomPayloadChannels()));
             editBox.setValueListener(value -> {
                 String[] channels = value.split("\n");
-                ClientSpooferOptions.ALLOWED_CUSTOM_PAYLOAD_CHANNELS.clear();
+                options.setAllowedCustomPayloadChannels(new HashSet<>());
                 for (String channel : channels) {
                     String trimmed = channel.trim();
                     if (!trimmed.isBlank()) {
-                        ClientSpooferOptions.ALLOWED_CUSTOM_PAYLOAD_CHANNELS.add(trimmed);
+                        Set<String> allowedChannels = new HashSet<>(options.getAllowedCustomPayloadChannels());
+                        allowedChannels.add(trimmed);
+                        options.setAllowedCustomPayloadChannels(allowedChannels);
                     }
                 }
             });
@@ -151,9 +129,7 @@ public class ClientSpooferOptionsScreen extends Screen {
         }
 
         // Done
-        widgets.add(Button.builder(Component.translatable("gui.done"), _ -> onClose())
-                .size(200, 20)
-                .build());
+        widgets.add(Button.builder(Component.translatable("gui.done"), _ -> onClose()).build());
 
         int y = 5;
         for (AbstractWidget widget : widgets) {
@@ -164,9 +140,27 @@ public class ClientSpooferOptionsScreen extends Screen {
         }
     }
 
+    private @NotNull Component spoofModeToComponent(SpoofMode spoofMode) {
+        return switch (spoofMode) {
+            case VANILLA -> Component.translatable("clientspoofer.option.spoof_mode.vanilla");
+            case MODDED -> Component.translatable("clientspoofer.option.spoof_mode.modded");
+            case CUSTOM -> Component.translatable("clientspoofer.option.spoof_mode.custom");
+            case OFF -> OPTION_OFF;
+        };
+    }
+
+    private @NotNull SpoofMode toggleSpoofMode(SpoofMode spoofMode) {
+        return switch (spoofMode) {
+            case VANILLA -> SpoofMode.MODDED;
+            case MODDED -> SpoofMode.CUSTOM;
+            case CUSTOM -> SpoofMode.OFF;
+            case OFF -> SpoofMode.VANILLA;
+        };
+    }
+
     @Override
     public void onClose() {
-        ClientSpooferOptions.save(ClientSpoofer.CONFIG_FILE);
+        ClientSpoofer.saveOptions();
         Minecraft.getInstance().setScreen(previous);
     }
 
@@ -215,15 +209,18 @@ public class ClientSpooferOptionsScreen extends Screen {
         private final Checkbox checkbox;
 
         public ModAllowEntry(@NotNull ModContainer mod) {
+            ClientSpooferOptions options = ClientSpoofer.getOptions();
             checkbox = Checkbox.builder(Component.literal(mod.getMetadata().getName()), font)
-                    .selected(ClientSpooferOptions.ALLOWED_MODS.contains(mod.getMetadata().getId()))
+                    .selected(options.getAllowedMods().contains(mod.getMetadata().getId()))
                     .onValueChange((_, value) -> {
                         String modId = mod.getMetadata().getId();
+                        Set<String> allowedMods = new HashSet<>(options.getAllowedMods());
                         if (value) {
-                            ClientSpooferOptions.ALLOWED_MODS.add(modId);
+                            allowedMods.add(modId);
                         } else {
-                            ClientSpooferOptions.ALLOWED_MODS.remove(modId);
+                            allowedMods.remove(modId);
                         }
+                        options.setAllowedMods(allowedMods);
                     })
                     .build();
         }
