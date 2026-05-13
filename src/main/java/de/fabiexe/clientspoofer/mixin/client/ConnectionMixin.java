@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Connection.class)
 public class ConnectionMixin {
     @Inject(method = "sendPacket", at = @At("HEAD"), cancellable = true)
-    public void sendPacket(Packet<?> packet, ChannelFutureListener channelFutureListener, boolean bl, CallbackInfo ci) {
+    public void sendPacket(Packet<?> packet, ChannelFutureListener listener, boolean flush, CallbackInfo ci) {
         if (packet instanceof ServerboundCustomPayloadPacket(CustomPacketPayload payload)) {
             if (!(payload instanceof DiscardedPayload) && !(payload instanceof BrandPayload)) {
                 if (ClientSpooferOptions.SPOOF_MODE == SpoofMode.OFF) {

@@ -29,7 +29,7 @@ public class ComponentUtils {
     public static @NotNull String getString(@NotNull Component component) {
         if (component instanceof MutableComponent) {
             StringBuilder stringBuilder = new StringBuilder();
-            visit(component.getContents()).ifPresent(stringBuilder::append);
+            stringBuilder.append(visit(component.getContents()));
             for (Component sibling : component.getSiblings()) {
                 stringBuilder.append(getString(sibling));
             }
@@ -39,17 +39,37 @@ public class ComponentUtils {
         }
     }
 
-    public static @NotNull Optional<String> visit(@NotNull ComponentContents contents) {
-        if (contents instanceof KeybindContents keybind) {
-            if (!canTranslate(keybind.getName())) {
-                return Optional.of(keybind.getName());
+    public static @NotNull String visit(@NotNull ComponentContents contents) {
+        StringBuilder stringBuilder = new StringBuilder();
+        switch (contents) {
+            case KeybindContents keybind -> {
+                if (canTranslate(keybind.getName())) {
+                    contents.visit(part -> {
+                        stringBuilder.append(part);
+                        return Optional.empty();
+                    });
+                } else {
+                    return keybind.getName();
+                }
             }
-        } else if (contents instanceof TranslatableContents translatable) {
-            if (!canTranslate(translatable.getKey())) {
-                return Optional.of(Objects.requireNonNullElseGet(translatable.getFallback(), translatable::getKey));
+            case TranslatableContents translatable -> {
+                if (canTranslate(translatable.getKey())) {
+                    contents.visit(part -> {
+                        stringBuilder.append(part);
+                        return Optional.empty();
+                    });
+                } else {
+                    return Objects.requireNonNullElseGet(translatable.getFallback(), translatable::getKey);
+                }
+            }
+            default -> {
+                contents.visit(part -> {
+                    stringBuilder.append(part);
+                    return Optional.empty();
+                });
             }
         }
-        return contents.visit(Optional::of);
+        return stringBuilder.toString();
     }
 
     public static boolean canTranslate(@NotNull String key) {
