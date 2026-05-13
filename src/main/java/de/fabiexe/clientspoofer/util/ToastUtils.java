@@ -1,12 +1,12 @@
 package de.fabiexe.clientspoofer.util;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.network.chat.Component;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class ToastUtils {
     private static final Set<String> serversAttemptedReadingMods = new HashSet<>();

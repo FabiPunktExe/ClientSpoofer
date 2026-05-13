@@ -24,6 +24,10 @@ java {
     }
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/clientspoofer.accesswidener")
+}
+
 tasks {
     compileJava {
         options.encoding = "UTF-8"
@@ -32,11 +36,11 @@ tasks {
 
     processResources {
         filesMatching("fabric.mod.json") {
-            expand(mapOf(
+            expand(
                 "version" to project.version,
                 "minecraft_version" to libs.versions.minecraft.get(),
                 "modmenu_version" to libs.versions.modmenu.get()
-            ))
+            )
         }
     }
 

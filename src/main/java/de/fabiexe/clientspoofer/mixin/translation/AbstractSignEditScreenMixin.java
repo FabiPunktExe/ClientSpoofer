@@ -1,15 +1,16 @@
-package de.fabiexe.clientspoofer.mixin.client;
+package de.fabiexe.clientspoofer.mixin.translation;
 
 import de.fabiexe.clientspoofer.ClientSpooferOptions;
 import de.fabiexe.clientspoofer.util.ComponentUtils;
 import de.fabiexe.clientspoofer.util.ToastUtils;
-import java.util.function.Function;
-import java.util.stream.Stream;
 import net.minecraft.client.gui.screens.inventory.AbstractSignEditScreen;
 import net.minecraft.network.chat.Component;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 @Mixin(AbstractSignEditScreen.class)
 public abstract class AbstractSignEditScreenMixin {

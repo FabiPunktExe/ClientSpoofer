@@ -1,13 +1,14 @@
-package de.fabiexe.clientspoofer.mixin.client;
+package de.fabiexe.clientspoofer.mixin.fingerprinting;
 
 import de.fabiexe.clientspoofer.ClientSpooferOptions;
 import de.fabiexe.clientspoofer.SpoofMode;
-import java.util.Map;
 import net.minecraft.client.multiplayer.KnownPacksManager;
 import net.minecraft.server.packs.repository.KnownPack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.Map;
 
 @Mixin(KnownPacksManager.class)
 public class KnownPacksManagerMixin {

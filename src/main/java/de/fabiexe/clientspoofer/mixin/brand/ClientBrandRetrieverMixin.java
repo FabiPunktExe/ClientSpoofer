@@ -1,4 +1,4 @@
-package de.fabiexe.clientspoofer.mixin.client;
+package de.fabiexe.clientspoofer.mixin.brand;
 
 import de.fabiexe.clientspoofer.ClientSpooferOptions;
 import net.minecraft.client.ClientBrandRetriever;

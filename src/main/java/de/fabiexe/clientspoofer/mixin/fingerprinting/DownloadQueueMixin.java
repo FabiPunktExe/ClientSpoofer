@@ -1,4 +1,4 @@
-package de.fabiexe.clientspoofer.mixin;
+package de.fabiexe.clientspoofer.mixin.fingerprinting;
 
 import de.fabiexe.clientspoofer.ClientSpooferOptions;
 import net.minecraft.client.Minecraft;

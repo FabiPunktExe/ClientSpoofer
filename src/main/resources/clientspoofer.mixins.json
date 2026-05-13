@@ -1,22 +1,21 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "de.fabiexe.clientspoofer.mixin",
-  "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "AnvilMenuMixin",
-    "DownloadQueueMixin",
-    "LanguageAccessor"
-  ],
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [],
   "client": [
-    "client.AbstractSignEditScreenMixin",
-    "client.AnvilScreenMixin",
-    "client.ClientBrandRetrieverMixin",
-    "client.ConnectionMixin",
-    "client.KnownPacksManagerMixin",
-    "client.LanguageManagerAccessor"
+    "brand.ClientBrandRetrieverMixin",
+    "custompayload.ConnectionMixin",
+    "fingerprinting.DownloadQueueMixin",
+    "fingerprinting.KnownPacksManagerMixin",
+    "translation.AbstractSignEditScreenMixin",
+    "translation.AnvilMenuMixin",
+    "translation.AnvilScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
   }
 }

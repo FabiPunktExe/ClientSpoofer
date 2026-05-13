@@ -1,10 +1,11 @@
 package de.fabiexe.clientspoofer;
 
-import java.nio.file.Path;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.Minecraft;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.nio.file.Path;
 
 public class ClientSpoofer implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("clientspoofer");

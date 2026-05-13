@@ -1,4 +1,4 @@
-package de.fabiexe.clientspoofer.mixin.client;
+package de.fabiexe.clientspoofer.mixin.translation;
 
 import de.fabiexe.clientspoofer.ClientSpooferOptions;
 import de.fabiexe.clientspoofer.util.ComponentUtils;

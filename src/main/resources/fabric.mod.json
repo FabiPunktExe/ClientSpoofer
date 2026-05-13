@@ -17,6 +17,7 @@
     "modmenu": ["de.fabiexe.clientspoofer.integration.ModMenuIntegration"]
   },
   "mixins": ["clientspoofer.mixins.json"],
+  "accessWidener": "clientspoofer.accesswidener",
   "depends": {
     "fabricloader": "*",
     "minecraft": "${minecraft_version}"

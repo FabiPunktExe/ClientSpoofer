@@ -1,14 +1,12 @@
 package de.fabiexe.clientspoofer.util;
 
 import de.fabiexe.clientspoofer.ClientSpooferOptions;
-import de.fabiexe.clientspoofer.mixin.LanguageAccessor;
-import de.fabiexe.clientspoofer.mixin.client.LanguageManagerAccessor;
-import java.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.resources.language.ClientLanguage;
 import net.minecraft.client.resources.language.LanguageInfo;
+import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
@@ -22,8 +20,10 @@ import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.*;
+
 public class ComponentUtils {
-    private static final Language language = LanguageAccessor.invokeLoadDefault();
+    private static final Language language = Language.loadDefault();
     private static final Map<ClientPacketListener, Language> serverLanguages = new IdentityHashMap<>();
 
     public static @NotNull String getString(@NotNull Component component) {
@@ -110,10 +110,10 @@ public class ComponentUtils {
 
         String currentLanguageCode = minecraft.getLanguageManager().getSelected();
         LanguageInfo languageInfo;
-        Map<String, LanguageInfo> languages = LanguageManagerAccessor.invokeExtractLanguages(resourceManager.listPacks());
+        Map<String, LanguageInfo> languages = LanguageManager.extractLanguages(resourceManager.listPacks());
         List<String> list = new ArrayList<>(2);
         list.add("en_us");
-        boolean bidirectional = LanguageManagerAccessor.getDefaultLanguage().bidirectional();
+        boolean bidirectional = LanguageManager.DEFAULT_LANGUAGE.bidirectional();
         if (!currentLanguageCode.equals("en_us") && (languageInfo = languages.get(currentLanguageCode)) != null) {
             list.add(currentLanguageCode);
             bidirectional = languageInfo.bidirectional();
