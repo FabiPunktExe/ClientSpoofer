@@ -167,7 +167,7 @@ public class ClientSpooferOptionsScreen extends Screen {
     @Override
     public void onClose() {
         ClientSpooferOptions.save(ClientSpoofer.CONFIG_FILE);
-        Minecraft.getInstance().setScreen(previous);
+        Minecraft.getInstance().gui.setScreen(previous);
     }
 
     private void fillModAllowList() {

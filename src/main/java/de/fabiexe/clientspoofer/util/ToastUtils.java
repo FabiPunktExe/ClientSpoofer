@@ -4,7 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.toasts.SystemToast;
+import net.minecraft.client.gui.components.toasts.Toast;
+import net.minecraft.client.gui.components.toasts.ToastManager;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.network.chat.Component;
 
@@ -24,6 +27,6 @@ public class ToastUtils {
         SystemToast.SystemToastId id = new SystemToast.SystemToastId(10000L);
         Component title = Component.literal("Client Spoofer");
         Component message = Component.translatable("clientspoofer.toast.server_attempted_reading_mods");
-        Minecraft.getInstance().getToastManager().addToast(SystemToast.multiline(Minecraft.getInstance(), id, title, message));
+        Minecraft.getInstance().gui.toastManager().addToast(new SystemToast(id, title, message));
     }
 }
